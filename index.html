@@ -15,12 +15,16 @@
         <h1>Weather Dashboard</h1>
     </header>
     <div id="searchbar-area">
-        <h2>Search for a city:</h2>
-        <input type="search" id="city-search">
-        <button>Search</button>
+        <form autocomplete="off" action="/action_page.php">
+            <h2>Search for a city:</h2>
+            <div class="autocomplete" style="width:300px;">
+              <input id="myInput" type="text" name="myCountry" placeholder="Country">
+            </div>
+            <input type="submit">
+          </form>
     </div>
     <div id="info-display-area">
-        <div id="current-info-area" class="border"></div>
+        <div id="current-info-area" class=""></div>
         <div id="five-day-forecast-area"></div>
     </div>
     <!-- Custom JS -->
