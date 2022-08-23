@@ -14,18 +14,25 @@
     <header class="container-fluid bg-dark text-light mb-5 p-3">
         <h1>Weather Dashboard</h1>
     </header>
-    <div id="searchbar-area">
-        <form autocomplete="off" action="/action_page.php">
-            <h2>Search for a city:</h2>
-            <div class="autocomplete" style="width:300px;">
-              <input id="myInput" type="text" name="myCountry" placeholder="Country">
+    <div class = "side-by-side">
+        <div id="searchbar-area">
+                <h2>Search for a city:</h2>
+                <div class="autocomplete" style="width:300px;">
+                  <input id="myInput" type="text" name="citySearch" placeholder="city name">
+                </div>
+                <button id="search-button">Submit</button>
+                <div id="search-history-area"></div>
+        </div>
+        <div id="info-display-area">
+            <div id="current-info-area" class="">
+                <h3 id="cityNameAndDate"></h3>
+                    <p id="temperature">Temperature:</p>
+                    <p id="windspeed">Wind:</p>
+                    <p id="humidity">Humidity:</p>
+                    <p id="UVindex">UV Index:</p>
             </div>
-            <input type="submit">
-          </form>
+            <div id="five-day-forecast-area"></div>
     </div>
-    <div id="info-display-area">
-        <div id="current-info-area" class=""></div>
-        <div id="five-day-forecast-area"></div>
     </div>
     <!-- Custom JS -->
     <script src="assets/js/script.js"></script>

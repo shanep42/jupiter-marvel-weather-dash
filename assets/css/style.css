@@ -2,6 +2,12 @@
 body {
   font: 16px Arial;
 }
+
+.side-by-side {
+  display: flex;
+  justify-content: space-around;
+}
+
 .autocomplete {
   /*the container must be positioned relative:*/
   position: relative;
