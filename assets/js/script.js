@@ -17,6 +17,7 @@ var searchHistory = [];
 
 var city;
 
+// Autocomplete function for search bar, slightly modified from W3Schools example snippet why
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
@@ -118,7 +119,7 @@ function getCity(){
   city = document.getElementById("myInput").value
   console.log("City:", city)
   if (city != undefined && city != ""){
-    fetch(queryURL + city + "&appid=" + APIKey)
+    fetch(queryURL + city + "&appid=" + APIKey + "&units=imperial")
     .then((response) => response.json())
     .then((data) => {
     console.log("Data:", data)
@@ -140,9 +141,13 @@ function display (data){
   }
 
   console.log(data.clouds)
-  //TODO: Why does this work in the If statement above and not here?
-  $('cityNameAndDate').text(city + today)
-  console.log(city)
+  $('#cityNameAndDate').text(city + "   (" + today + ")")
+  $('#temperature').text("Temperature: " + data.main.temp + "℉");
+  $('#windspeed').text("Wind: " + data.wind.speed + " MPH");
+  $('#humidity').text("Humidity: " + data.main.humidity + "%" );
+  $('#UVindex').text()
+
+
 }
 
 autocomplete(document.getElementById("myInput"), city_names);

@@ -3,6 +3,10 @@ body {
   font: 16px Arial;
 }
 
+header {
+  background-image: linear-gradient(to right, blue, rgb(5, 5, 46));
+}
+
 .side-by-side {
   display: flex;
   justify-content: space-around;
@@ -52,4 +56,24 @@ input[type=submit] {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
   color: #ffffff;
+}
+
+#info-display-area {
+  width: 60%
+}
+
+.forecast-card {
+  display: inline-block;
+  margin-top: 25px;
+  margin-right: 10px;
+  width: 17%;
+  height: 200px;
+  background-color: blue;
+  color: white;
+  font-weight: bold;
+}
+
+#search-bar-area {
+  display:flex;
+  flex-wrap: nowrap;
 }

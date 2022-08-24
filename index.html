@@ -11,8 +11,8 @@
     <title>Weather Dashboard</title>
 </head>
 <body>
-    <header class="container-fluid bg-dark text-light mb-5 p-3">
-        <h1>Weather Dashboard</h1>
+    <header class="container-fluid text-light mb-5 p-3">
+        <h1 class="d-flex justify-content-center">Weather Dashboard</h1>
     </header>
     <div class = "side-by-side">
         <div id="searchbar-area">
@@ -20,18 +20,24 @@
                 <div class="autocomplete" style="width:300px;">
                   <input id="myInput" type="text" name="citySearch" placeholder="city name">
                 </div>
-                <button id="search-button">Submit</button>
+                <button id="search-button">Search</button>
                 <div id="search-history-area"></div>
         </div>
         <div id="info-display-area">
-            <div id="current-info-area" class="">
+            <div id="current-info-area" class="border">
                 <h3 id="cityNameAndDate"></h3>
                     <p id="temperature">Temperature:</p>
                     <p id="windspeed">Wind:</p>
                     <p id="humidity">Humidity:</p>
                     <p id="UVindex">UV Index:</p>
             </div>
-            <div id="five-day-forecast-area"></div>
+            <div id="five-day-forecast-area">
+                <div class = "forecast-card"></div>
+                <div class = "forecast-card"></div>
+                <div class = "forecast-card"></div>
+                <div class = "forecast-card"></div>
+                <div class = "forecast-card"></div>
+            </div>
     </div>
     </div>
     <!-- Custom JS -->
