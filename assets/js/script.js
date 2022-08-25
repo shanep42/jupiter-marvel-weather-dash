@@ -8,6 +8,8 @@ var historyDisplay = document.getElementById("search-history-area");
 
 var searchInput = document.getElementById('myInput');
 
+var forecast = document.getElementById("five-day-forecast-area")
+
 // Gets a simple version of today's date without dayjs/moment
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
@@ -137,14 +139,50 @@ function getCity(city){
 }
 
 function getFiveDay(lat, long){
-  fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&exclude=current,minutely,hourly&appid=" + APIKey)
+  fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&units=imperial&appid=" + APIKey)
   .then ((response) => response.json())
   .then ((data) => {
     console.log("5-Day Data: ", data)
+    //since the exclude parameter does not seem to work with this version of the api, I'm going to attempt this by finding midnight and then counting on the 3 hour jumps to move the correct number of indices ahead to the next day.
+    // if successful, this should not require any consideration of today's date - the day will often change over at a different index, but the first midnight in the response data *should* always be tomorrow.
+    var midnightIndex = 0;
+    console.log("TEST: ", data.list[0].dt_txt)
+
+    while (!data.list[midnightIndex].dt_txt.endsWith("00:00:00")){
+      midnightIndex ++;
+    }
+    console.log(midnightIndex)
+
+    for (let i = midnightIndex; i <= data.list.length; i += 8){
+      var newCard = document.createElement('div');
+      var newDate = document.createElement('div');
+      var newTemp = document.createElement('div');
+      var newWind = document.createElement('div');
+      var newHumi = document.createElement('div');
+      newCard.setAttribute("class", "forecast-card");
+      
+      newDate.textContent = data.list[i].dt_txt.slice(0,10);
+      newTemp.innerHTML = "Temperature: " + data.list[i].main.temp + "℉";
+      newWind.innerHTML = "Wind: " + data.list[i].wind.speed + "mph";
+      newHumi.innerHTML = "Humidity: " + data.list[i].main.humidity + "%";
+      newCard.append(newDate);
+      newCard.append(newTemp);
+      newCard.append(newWind);
+      newCard.append(newHumi);
+
+      forecast.append(newCard);
+      // var newTest = document.createElement('div');
+      // newTest.textContent = "Hello world";
+      // newCard.appendChild(newTest);
+      // forecast.append(newCard)
+      
+
+      console.log("INDEX:", i)
+    }
   })
 }
 
-function reSearch(city){}
+
 
 function display (data){
   // Displays not found and stops function if query string returns 404.
@@ -154,8 +192,8 @@ function display (data){
   }
 
   // Adds search to the search history if it is not already there.
-  if (!searchHistory.includes(city)){
-    searchHistory.push(city);
+  if (!searchHistory.includes(data.name)){
+    searchHistory.push(data.name);
     var newButton = document.createElement('button');
     newButton.setAttribute('class', 'history-button');
     newButton.innerHTML = data.name;
@@ -166,10 +204,16 @@ function display (data){
   $('#temperature').text("Temperature: " + data.main.temp + "℉");
   $('#windspeed').text("Wind: " + data.wind.speed + " MPH");
   $('#humidity').text("Humidity: " + data.main.humidity + "%" );
-  $('#UVindex').text()
+  // $('#UVindex').text() Currently looking into whether this feature is still available for free.
 
 
 }
 
 autocomplete(document.getElementById("myInput"), city_names);
 document.getElementById("search-button").addEventListener("click", getInput)
+document.addEventListener('click', function(event){
+  if (event.target.classList.contains("history-button")){
+    getCity(event.target.innerHTML)
+  }
+})
+

@@ -73,8 +73,8 @@ input[type=submit] {
   margin-top: 25px;
   margin-right: 10px;
   width: 17%;
-  height: 200px;
-  background-color: blue;
+  height: auto;
+  background-color: darkblue;
   color: white;
   font-weight: bold;
 }
