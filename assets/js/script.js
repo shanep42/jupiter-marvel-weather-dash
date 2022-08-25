@@ -2,13 +2,16 @@ var city_names = ["Aberdeen", "Abilene", "Akron", "Albany", "Albuquerque", "Alex
 
 var APIKey = '082019878d795523fbe905e218cc12b2';
 
-var queryURL = "http://api.openweathermap.org/data/2.5/weather?q="
+var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=";
 
+var historyDisplay = document.getElementById("search-history-area");
+
+var searchInput = document.getElementById('myInput');
 
 // Gets a simple version of today's date without dayjs/moment
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var mm = String(today.getMonth() + 1).padStart(2, '0');
 var yyyy = today.getFullYear();
 
 today = mm + '/' + dd + '/' + yyyy;
@@ -115,18 +118,33 @@ function autocomplete(inp, arr) {
   });
   }
 
-function getCity(){
-  city = document.getElementById("myInput").value
+function getInput() {
+  var input = searchInput.value;
+  getCity(input);
+}
+
+function getCity(city){
   console.log("City:", city)
   if (city != undefined && city != ""){
-    fetch(queryURL + city + "&appid=" + APIKey + "&units=imperial")
+    fetch(queryURL + city  + "&units=imperial&appid=" + APIKey)
     .then((response) => response.json())
     .then((data) => {
     console.log("Data:", data)
     display(data)
+    getFiveDay(data.coord.lat, data.coord.lon)
     })
   }
 }
+
+function getFiveDay(lat, long){
+  fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&exclude=current,minutely,hourly&appid=" + APIKey)
+  .then ((response) => response.json())
+  .then ((data) => {
+    console.log("5-Day Data: ", data)
+  })
+}
+
+function reSearch(city){}
 
 function display (data){
   // Displays not found and stops function if query string returns 404.
@@ -137,11 +155,14 @@ function display (data){
 
   // Adds search to the search history if it is not already there.
   if (!searchHistory.includes(city)){
-    searchHistory.push(city)
+    searchHistory.push(city);
+    var newButton = document.createElement('button');
+    newButton.setAttribute('class', 'history-button');
+    newButton.innerHTML = data.name;
+    historyDisplay.append(newButton);
   }
 
-  console.log(data.clouds)
-  $('#cityNameAndDate').text(city + "   (" + today + ")")
+  $('#cityNameAndDate').text(data.name + "   (" + today + ")")
   $('#temperature').text("Temperature: " + data.main.temp + "℉");
   $('#windspeed').text("Wind: " + data.wind.speed + " MPH");
   $('#humidity').text("Humidity: " + data.main.humidity + "%" );
@@ -151,4 +172,4 @@ function display (data){
 }
 
 autocomplete(document.getElementById("myInput"), city_names);
-document.getElementById("search-button").addEventListener("click", getCity)
+document.getElementById("search-button").addEventListener("click", getInput)

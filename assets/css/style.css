@@ -12,6 +12,12 @@ header {
   justify-content: space-around;
 }
 
+hr {
+  
+  margin-top: 25px;
+  border-top: solid gray 3px;
+}
+
 .autocomplete {
   /*the container must be positioned relative:*/
   position: relative;
@@ -73,7 +79,20 @@ input[type=submit] {
   font-weight: bold;
 }
 
-#search-bar-area {
-  display:flex;
-  flex-wrap: nowrap;
+#search-button {
+  margin-top: 15px;
+  background-color: rgb(34, 154, 194);
+  color: white;
+  border: none;
+}
+
+.over-under {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.history-button {
+  width: 100%;
+  margin-top: 10px;
 }
