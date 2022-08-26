@@ -10,11 +10,7 @@ var searchInput = document.getElementById('myInput');
 
 var forecast = document.getElementById("five-day-forecast-area")
 
-// var iconURL =
-//               "https://openweathermap.org/img/wn/" +
-//               weatherDescription +
-//               ".png";
-//             var htmlIconImg = "<img src='" + iconURL + "'>";
+
 
 
 // Gets a simple version of today's date without dayjs/moment
@@ -192,13 +188,17 @@ function getFiveDay(lat, long){
       var newTemp = document.createElement('div');
       var newWind = document.createElement('div');
       var newHumi = document.createElement('div');
+      var newIcon = document.createElement('img')
       newCard.setAttribute("class", "forecast-card");
       
       newDate.textContent = data.list[i].dt_txt.slice(0,10);
+      var iconURL = "https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon +".png";
+      newIcon.setAttribute('src', iconURL)
       newTemp.innerHTML = "Temperature: " + data.list[i].main.temp + "℉";
       newWind.innerHTML = "Wind: " + data.list[i].wind.speed + "mph";
       newHumi.innerHTML = "Humidity: " + data.list[i].main.humidity + "%";
       newCard.append(newDate);
+      newCard.append(newIcon);
       newCard.append(newTemp);
       newCard.append(newWind);
       newCard.append(newHumi);
@@ -227,15 +227,18 @@ function display (data){
     newButton.innerHTML = data.name;
     historyDisplay.append(newButton);
   }
+    // For displaying icons representing weather conditions
+    var iconURL = "https://openweathermap.org/img/wn/" + data.weather[0].icon +".png";
+    // var htmlIconImg = "<img src='" + iconURL + "'>";
 
   $('#cityNameAndDate').text(data.name + "   (" + today + ")")
+  document.getElementById('current-icon').setAttribute("src", iconURL)
   $('#temperature').text("Temperature: " + data.main.temp + "℉");
   $('#windspeed').text("Wind: " + data.wind.speed + " MPH");
   $('#humidity').text("Humidity: " + data.main.humidity + "%" );
-
-
-
 }
+
+
 
 var historySave = JSON.parse(localStorage.getItem("searchHistory"));
 if (historySave == null || historySave == undefined){
