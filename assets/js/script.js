@@ -10,6 +10,13 @@ var searchInput = document.getElementById('myInput');
 
 var forecast = document.getElementById("five-day-forecast-area")
 
+// var iconURL =
+//               "https://openweathermap.org/img/wn/" +
+//               weatherDescription +
+//               ".png";
+//             var htmlIconImg = "<img src='" + iconURL + "'>";
+
+
 // Gets a simple version of today's date without dayjs/moment
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
@@ -120,24 +127,50 @@ function autocomplete(inp, arr) {
   });
   }
 
+
+// Get user input from search box
 function getInput() {
   var input = searchInput.value;
   getCity(input);
 }
 
+// Get basic weather info, as well as latitude and longitude for later API calls
 function getCity(city){
   console.log("City:", city)
   if (city != undefined && city != ""){
     fetch(queryURL + city  + "&units=imperial&appid=" + APIKey)
     .then((response) => response.json())
     .then((data) => {
-    console.log("Data:", data)
-    display(data)
+    console.log("Data:", data);
+    display(data);
+    UVindex(data.coord.lat, data.coord.lon);
     getFiveDay(data.coord.lat, data.coord.lon)
     })
   }
 }
 
+// Get UV Index information from the next available forecast point and append it to the current weather display
+function UVindex(lat, long){
+  fetch("https://api.openweathermap.org/data/2.5/uvi/forecast?lat=" + lat + "&lon=" + long + "&units=imperial&appid=" + APIKey)
+  .then((response) => response.json())
+  .then((data) => {
+    var uvi = data[0].value;
+    $('#UVindex').text(uvi)
+    console.log(uvi)
+    if (uvi <= 2){
+      //$('#UVindex').classList.add("uvfavorable")
+      console.log('low')
+    } else if (uvi > 2 && uvi <= 7){
+      //$('#UVindex').classList.add("uvmoderate")
+      console.log('medium')
+    } else {
+      //$('#UVindex').classList.add("uvsevere")
+      console.log('high')
+    }
+  })
+}
+
+// Get forecast information from midnight for the next five available days and display it in cards.
 function getFiveDay(lat, long){
   fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&units=imperial&appid=" + APIKey)
   .then ((response) => response.json())
@@ -153,7 +186,7 @@ function getFiveDay(lat, long){
     }
     console.log(midnightIndex)
 
-    for (let i = midnightIndex; i <= data.list.length; i += 8){
+    for (let i = midnightIndex; i <= data.list.length - 1; i += 8){
       var newCard = document.createElement('div');
       var newDate = document.createElement('div');
       var newTemp = document.createElement('div');
@@ -183,7 +216,7 @@ function getFiveDay(lat, long){
 }
 
 
-
+// Prints basic weather date to the current weather area
 function display (data){
   // Displays not found and stops function if query string returns 404.
   if (data.cod == 404){
@@ -194,6 +227,8 @@ function display (data){
   // Adds search to the search history if it is not already there.
   if (!searchHistory.includes(data.name)){
     searchHistory.push(data.name);
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+    console.log(searchHistory)
     var newButton = document.createElement('button');
     newButton.setAttribute('class', 'history-button');
     newButton.innerHTML = data.name;
@@ -204,15 +239,33 @@ function display (data){
   $('#temperature').text("Temperature: " + data.main.temp + "℉");
   $('#windspeed').text("Wind: " + data.wind.speed + " MPH");
   $('#humidity').text("Humidity: " + data.main.humidity + "%" );
-  // $('#UVindex').text() Currently looking into whether this feature is still available for free.
+
 
 
 }
 
+var historySave = JSON.parse(localStorage.getItem("searchHistory"));
+if (historySave == null || historySave == undefined){
+  searchHistory = [];
+} else {
+  searchHistory = historySave;
+  for (let i = 0; i < searchHistory.length; i++){
+    var newButton = document.createElement('button');
+    newButton.setAttribute('class', 'history-button');
+    newButton.innerHTML = searchHistory[i];
+    historyDisplay.append(newButton);
+  }
+}
+
+
 autocomplete(document.getElementById("myInput"), city_names);
-document.getElementById("search-button").addEventListener("click", getInput)
+document.getElementById("search-button").addEventListener("click", function(){
+  forecast.innerHTML = "";
+  getInput();
+})
 document.addEventListener('click', function(event){
   if (event.target.classList.contains("history-button")){
+    forecast.innerHTML = "";
     getCity(event.target.innerHTML)
   }
 })

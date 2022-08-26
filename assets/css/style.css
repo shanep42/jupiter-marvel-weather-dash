@@ -96,3 +96,15 @@ input[type=submit] {
   width: 100%;
   margin-top: 10px;
 }
+
+.uvfavorable {
+  background-color: green;
+}
+
+.uvmoderate {
+  background-color: yellow;
+}
+
+.uvsever {
+  background-color: red;
+}
