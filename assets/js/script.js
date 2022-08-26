@@ -158,13 +158,13 @@ function UVindex(lat, long){
     $('#UVindex').text(uvi)
     console.log(uvi)
     if (uvi <= 2){
-      //$('#UVindex').classList.add("uvfavorable")
+     document.getElementById("UVindex").classList.add("uvfavorable")
       console.log('low')
     } else if (uvi > 2 && uvi <= 7){
-      //$('#UVindex').classList.add("uvmoderate")
+      document.getElementById("UVindex").classList.add("uvmoderate")
       console.log('medium')
     } else {
-      //$('#UVindex').classList.add("uvsevere")
+      document.getElementById("UVindex").classList.add("uvsevere")
       console.log('high')
     }
   })
@@ -202,14 +202,7 @@ function getFiveDay(lat, long){
       newCard.append(newTemp);
       newCard.append(newWind);
       newCard.append(newHumi);
-
-      forecast.append(newCard);
-      // var newTest = document.createElement('div');
-      // newTest.textContent = "Hello world";
-      // newCard.appendChild(newTest);
-      // forecast.append(newCard)
-      
-
+      forecast.append(newCard);     
       console.log("INDEX:", i)
     }
   })
